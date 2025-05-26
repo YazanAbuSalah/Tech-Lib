@@ -22,6 +22,7 @@ BEGIN
 END;
 
 
+
 SET @i = 1;
 
 WHILE @i <= 1000
@@ -37,6 +38,9 @@ BEGIN
     SET @i = @i + 1;
 END;
 
+
+
+DECLARE @i INT = 1;
 
 SET @i = 1;
 
@@ -58,8 +62,8 @@ BEGIN
 
     INSERT INTO Loans (BookID, BorrowerID, DateBorrowed, DueDate, DateReturned)
     VALUES (
-        ((@i - 1) % 1000) + 1, -- BookID 1-1000
-        ((@i - 1) % 1000) + 1, -- BorrowerID 1-1000
+        @i + 3000, -- BookID 1-1000
+        @i + 2000, -- BorrowerID 1-1000
         @loanDate,
         @dueDate,
         @returnDate
