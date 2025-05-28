@@ -66,3 +66,32 @@ WHERE GenreRank = 1
 ORDER BY GenreRank ;
 
 
+--5
+
+DROP PROCEDURE IF EXISTS sp_AddNewBorrower ;
+GO
+CREATE PROCEDURE sp_AddNewBorrower (@FirstName NVARCHAR(100) ,@LastName NVARCHAR(100) ,@Email NVARCHAR(255),@DateOfBirth DATE ,@MembershipDate DATE )
+AS BEGIN
+	IF EXISTS(SELECT 1 FROM Borrowers WHERE Email = @Email)
+	BEGIN
+		RAISERROR('Email already exists.', 16, 1);
+		RETURN ;
+	END
+	INSERT INTO Borrowers(FirstName , LastName , Email , DateOfBirth  , MembershipDate  )
+	VALUES( @FirstName  ,@LastName  ,@Email ,@DateOfBirth  ,@MembershipDate  )
+	DECLARE @NewBorrowerID INT ;
+	SET @NewBorrowerID = SCOPE_IDENTITY();
+	SELECT 'Success' AS Status, 'Borrower added successfully.' AS Message, @NewBorrowerID AS BorrowerID;
+
+END;
+
+
+
+EXEC sp_AddNewBorrower
+    @FirstName = 'yazan',
+    @LastName = 'Hasan',
+    @Email = 'yazanhassan@email.com',
+    @DateOfBirth = '2000-02-27',
+    @MembershipDate ='2000-02-27';
+
+
