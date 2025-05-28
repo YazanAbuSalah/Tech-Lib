@@ -49,4 +49,20 @@ ORDER BY BorrowRank;
 
 --4
 
+WITH PopularGenre AS(
+	SELECT Genre , COUNT(*) AS GenreCount
+	FROM Books b JOIN Loans l ON b.BookID = l.BookID
+	where  DateBorrowed >= DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) - 1, 0)
+  AND DateBorrowed <= EOMONTH(GETDATE(), -1) 
+	GROUP BY Genre 
+)
+
+SELECT Genre , GenreCount ,GenreRank
+FROM( SELECT Genre , GenreCount ,
+RANK() OVER(ORDER BY GenreCount DESC) AS GenreRank 
+From PopularGenre
+)ranked
+WHERE GenreRank = 1
+ORDER BY GenreRank ;
+
 
