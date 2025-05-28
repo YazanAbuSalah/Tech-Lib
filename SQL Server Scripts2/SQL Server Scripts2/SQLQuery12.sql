@@ -28,3 +28,25 @@ FROM ActiveBorrowers;
 
 
 
+--3
+
+WITH BorrowCounts AS (
+	SELECT 
+		b.BorrowerID,
+		b.FirstName,
+		b.LastName,
+		COUNT(*) AS LoanCount
+	FROM Borrowers b
+    JOIN Loans l ON b.BorrowerID = l.BorrowerID	
+	GROUP BY b.BorrowerID, b.FirstName, b.LastName
+)
+SELECT  BorrowerID, FirstName, LastName, LoanCount,
+RANK() OVER(ORDER BY LoanCount DESC ) AS BorrowRank
+FROM BorrowCounts 
+ORDER BY BorrowRank;
+
+
+
+--4
+
+
